@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Registered Guests{% endblock %}
+{% block head %}
+  {{ super() }}
+{% endblock %}
+{% block content %}
+  <h1>Registered Guests</h1>
+  </div>
+    <div class="form-group">
+    <label for="partyfield">Guests count from Redis</label>
+    <p>  {{ guests_count }} </p>
+  </div>
+  <table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Attendees</th>
+  </tr>
+  </thead>
+  <tbody>
+  {% for guest in guests %}
+    <tr>
+    <td>{{ guest.name }}</td>
+    <td>{{ guest.email }}</td>
+    <td>{% if guest.partysize %}{{ guest.partysize }}{% else %}1{% endif %}</td>
+    </tr>
+  {% endfor %}
+</table>
+<p class="navbar-btn">
+  <a href="/register" class="btn btn-default">Register!</a>
+</p>
+{% endblock %}

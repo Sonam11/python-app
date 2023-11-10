@@ -1,0 +1,183 @@
+# Global configuration used across K8s objects
+global:  
+  # Mandatory
+  # Name of Ethos cluster
+  # Should be defined at the region level
+  clusterName: ethos11-stage-va6
+
+  # Mandatory
+  # Your service region according to the Adobe standard, see https://wiki.corp.adobe.com/x/FbDQWQ
+  # Should be defined at the region level
+  serviceRegion: va6
+
+  # Mandatory
+  # Cluster cloud type
+  # Should be defined at the region level
+  cloudType: AWS
+
+  # Mandatory
+  # Ingress access
+  accessLevel: corp
+
+# The name of the chart dependency
+# This way one can override the dependent charts value's 
+# Here one can redefine the config for the pods in the particular region
+ethos-k8s-helm-templates:
+  # Mandatory
+  # Deployment object configuration
+  deployment:
+    # Mandatory
+    # List of containers to be configured in Deployment object
+    # At present we are supporting one inet container
+    # Mandatory to be defined at the region level for deployment
+    containers:
+        # Mandatory
+        # Name of container
+        # THe name of the container can be any string value, Ex: cont1
+      - name: cont1
+
+        # Mandatory
+        # CPU request
+        cpu: 1
+
+        # Mandatory
+        # Memory request
+        memory: 2048
+
+        # Optional
+        # List of environment variable
+        envVars: 
+          nonSecrets: []
+          secrets: []
+
+        # Mandatory to be defined at the region level for deployment,
+        # As the Argo workflow will update the sha at this path
+        # Docker image details
+        image:
+          # Mandatory
+          # Use aws artifactory hosted by IT team
+          # If your artifactory registry name is: docker-myservice-release
+          # Then use repository as: docker-myservice-release.dr-uw2.adobeitc.com/<git_org>/<git_repo>
+          repository: docker-ethos-caas-next-release.dr-uw2.adobeitc.com/ethos-orca/python-app5
+
+          # Mandatory
+          # Image name
+          # Use convention: <git_repo>-img
+          name: python-app5-img
+
+          # Mandatory
+          # This is just a placeholder
+          # No need to update this as it will be modified by argo promote env workflow
+          tag: somesha
+
+        # Mandatory
+        # Liveness Probe configurations for a container
+        livenessProbe:
+          # Mandatory
+          # Path for liveness probe GET request
+          # Ex: /ping
+          path: /ping
+
+          # Mandatory
+          port: 8080
+
+          # Optional.
+          # Number of 'seconds' after the container has started before liveness probes are initiated.
+          # Default = 30 seconds, ranges from 30 to 450. (seconds)
+          gracePeriod: 30
+
+          # Optionals
+          # Number of 'seconds' after which a livenessProbe is considered a failure
+          # regardless of the response.
+          # Default = 5 seconds, ranges from 2 to 26. (seconds)
+          timeout: 5
+
+        # Mandatory
+        # Readiness Probe configurations for a container
+        readinessProbe:
+          # Mandatory
+          # Path for readiness probe GET request
+          # Ex: /ping
+          path: /ping
+
+          # Mandatory
+          port: 8080
+
+          # Optional.
+          # Number of seconds after the container has started before readiness probes are initiated.
+          # Default = 30 seconds, ranges from 30 to 450. (seconds)
+          gracePeriod: 30
+
+          # Optional
+          # Number of 'seconds' after which a readinessProbe is considered a failure
+          # regardless of the response.
+          # Default = 5 seconds, ranges from 2 to 26. (seconds)
+          timeout: 5
+          
+  # Ingress related configurations
+  # Mandatory if you want to expose the service outside of the cluster or if you want to use canary/bluegreen deployment
+  # Recommended if you are using rolling or blue green deployment, it doesn't support canary deployment as of today
+  # Specify only one of ingressRoute or ingress
+  ingress:
+    # Type of ingress being used. Currently we only support httpProxy
+    httpProxy:
+      # Mandatory
+      # The port used by the ingress to expose the service
+      port: 8080
+
+      # Mandatory
+      # Configurable health check
+      healthCheck:
+
+        # Mandatory
+        path: /ping
+
+        # Optional
+        # Number of consecutive health check failures required before considering a service to be unhealthy
+        # Link: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.1/guide/ingress/annotations/#healthy-threshold-count
+        # Default = 3
+        unhealthyThresholdCount: 3
+
+        # Optional
+        # Number of consecutive health check successes required before considering an unhealthy service healthy
+        # Link: https://kubernetes-sigs.github.io/aws-load-balancer-controller/v2.1/guide/ingress/annotations/#unhealthy-threshold-count
+        # Default = 1
+        healthyThresholdCount: 1
+
+        # Optional
+        # Number of 'seconds' after which a health check is considered a failure
+        # regardless of the response.
+        # Default = 5 seconds, ranges from 2 to 26. (seconds)
+        timeout: 5
+
+      # Optional
+      # FQDN for your application
+      # If FQDN is not specified, The following convention is used to generate FQDN for your application:
+      #   For "public" generated FQDN: <GIT_ORG_MUST_BE_REPLACED>-<GIT_REPO_MUST_BE_REPLACED>-<ENVIRONMENT_NAME_MUST_BE_REPLACED>.<CLUSTER_NAME_MUST_BE_REPLACED>.ethos.adobe.net
+      #   For "corp"   generated FQDN: <GIT_ORG_MUST_BE_REPLACED>-<GIT_REPO_MUST_BE_REPLACED>-<ENVIRONMENT_NAME_MUST_BE_REPLACED>.corp.<CLUSTER_NAME_MUST_BE_REPLACED>.ethos.adobe.net
+      #   Where cluster_name will be in the format: ethos101-dev-va6
+      #   More details available on this doc https://git.corp.adobe.com/adobe-platform/k8s-infrastructure/blob/master/docs/user-guide.md#ingress-dns-names
+      # You can also use a route53 domain hosted in your own account
+      fqdn: ethos-orca-python-app4-deploy-ethos11-stage-va6-k-e2a782.stage.cloud.adobe.io
+      
+      tlsSecretName: heptio-contour/cluster-ssl-alternate
+
+  # Optional
+  # Mandatory if you want to expose a service outside of the namespace or if you want to use canary deployment
+  # Service object configuration
+  service:
+
+    # Mandatory
+    # List of ports being exposed by the service.
+    # Currently we only support one port
+    ports:
+     - 
+       # Port being exposed. If using ingressroute, at least one port from the list must match the ingressroute port
+       # Ex: 8080
+       port: 8080
+       # Protocol used by the service object
+       # Ex: TCP
+       protocol: TCP
+       # Container port that is exposed through the service
+       # Ex: 80
+       targetPort: 8080

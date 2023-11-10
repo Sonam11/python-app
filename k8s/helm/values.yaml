@@ -1,0 +1,65 @@
+# Global configuration used across K8s objects
+global:
+  # Mandatory
+  # Your application git org
+  # Should be defined at the Service level
+  gitOrg: ethos-orca
+
+  # Mandatory
+  # Your application git repo
+  # Should be defined at the Service level
+  gitRepo: python-app5
+
+  # Mandatory
+  # Specify the owner of the service
+  # This should match the Service Registry https://adobe.service-now.com/service_registry service name that generally identifies an organization.
+  # Should be defined at the Service level
+  adobeOwner: EthosFlex
+
+  # Mandatory
+  # Used to specify path name from a root component to this instance based on architectural is-part-of relationship.
+  # Required for CCF compliance.
+  # Naming guidance:
+  # -   Be as specific as possible and use all the levels of hierarchy that are present in your service architecture.
+  # -   The first component of the path name must be from this list (which is based on the level Adobe platform architecture):
+  # -   Allowed first component: CC, DC, MC, DPS, Behance, Stock, DI SC, Identity, Entitlements, ECommerce, Consoles, Gateway,
+  #     Analytics, CustomerSupport, Vader, ANS, PostOffice, APS, Other
+  # -  Include all of the levels that are defined by your architecture.
+  #    For example, if each of the worker types appears as a box in the Worker component in Shared Cloud (for example, a CreatePDF worker),
+  #    you would give instances of those workers the pathname SC.Worker.CreatePDF.
+  # -  Don't use the terms "Service" or "Adobe" in the names
+  # -  Use characters from the set A-Z a-z 0-9 _- and blank. Dot is reserved as the separator.
+  # -  For further information refer: https://wiki.corp.adobe.com/x/O98JVw
+  # Should be defined at the Service level
+  adobeArchPath: sc.worker.test
+
+  # Mandatory
+  # This is used to specify the type of the service the container exposes
+  # Possible values: DB, Cache, Worker, Router, AppServer, WebServer, DockerHost, LB, other
+  # Should be defined at the Service level
+  adobeClass: WebServer
+
+
+# The name of the chart dependency
+# This way we can override the dependent charts value's 
+# Here one can redefine the default config for the service.
+ethos-k8s-helm-templates:
+  # Mandatory
+  # Deployment object configuration
+  deployment:
+    # Mandatory
+    # Name of the deployment
+    # Note it will be added a suffix to `<gitOrg>--<gitRepo>-<serviceEnvironment>-<deployment-name>`
+    name: deploy1
+
+    # Mandatory
+    # Number of replicas
+    replicas: 2
+
+    # Optional for public registry
+    # Image pull secret for pulling images from private registry
+    imagePullSecrets:
+      # Mandatory
+      # Name of the secret
+      # If you are creating your own secret object, the name of the secret object and secretName field should be the same
+      secretName: registry-secret
