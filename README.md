@@ -40,5 +40,5 @@ Ethos has defined reusable templates for K8s objects to create a CaaS.Next Servi
     - `<environment>/values.yaml`:  This file defines the common attributes for an environment.
     - `<environment>/<region>/values.yaml`: This file defines the common attributes for a region.
  
-    - 
+- 
 
