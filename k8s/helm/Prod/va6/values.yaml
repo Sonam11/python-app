@@ -58,7 +58,7 @@ ethos-k8s-helm-templates:
           # Use aws artifactory hosted by IT team
           # If your artifactory registry name is: docker-myservice-release
           # Then use repository as: docker-myservice-release.dr-uw2.adobeitc.com/<git_org>/<git_repo>
-          repository:  docker-stayal-ethos-caas-next-release.dr-uw2.adobeitc.com/github-action-demo
+          repository: docker-stayal-ethos-caas-next-release.dr-uw2.adobeitc.com/github-action-demo
 
           # Mandatory
           # Image name

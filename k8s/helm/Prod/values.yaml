@@ -1,0 +1,59 @@
+# Global configuration used across K8s objects
+global:
+  # Mandatory
+  # Ethos cluster type
+  # Should be defined at the env level
+  clusterType: STG
+
+  # Mandatory
+  # Your service environment
+  # Allowed values: CI, Dev, DEV, QE, QA, Stage, STG, Production, PROD, Experimental, Fix, PreProd, PreStage.
+  # It is also acceptable to suffix the above with one or two digits, for example, Stage1, DEV5, CI27, if absolutely necessary.
+  # Should be defined in the env level
+  serviceEnvironment: Dev
+  
+
+# The name of the chart dependency
+# This way we can override the dependent charts value's 
+# Here one can redefine the config for the pods in the particular environment
+ethos-k8s-helm-templates:
+  # Mandatory
+  # Deployment object configuration
+  deployment:
+    # Mandatory
+    # Name of the deployment
+    # Note it will be added a suffix to `<gitOrg>--<gitRepo>-<serviceEnvironment>-<deployment-name>`
+    name: deploy1
+    # Optional
+    # scaling configuration
+    scaling:
+      # Mandatory
+      # Minimum/Maximum number of containers.
+      # NOTE: both need to be specified
+      # if minContainers are set to 0, CPU scaling will be disabled
+      minContainers: 1
+      maxContainers: 5
+      cpuTargetValue: 50
+
+  #  Mandatory
+  #  This is the section which controls deployment - Rollouts .
+  #  Two strategies are currently supported - rolling or canary. By default rolling is enabled;
+  # Refer Argo Rollout Doc for more details : https://argoproj.github.io/argo-rollouts/features/canary/
+  rollout:
+    # Mandatory
+    # Deployment strategy to choose.
+    strategy:
+      #  Rolling is a deployment strategy which performs progressive deployment by doing a Canary without any defined steps.
+      rolling:
+        # Mandatory
+        #  maxSurge defines the maximum number of replicas the rollout can create to move to the correct ratio set by the last setWeight.
+        #  Max Surge can either be an integer or percentage as a string (i.e. "20%")
+        maxSurge: 25%
+        # Mandatory
+        #  The maximum number of pods that can be unavailable during the update.
+        #  Value can be an absolute number (ex: 5) or a percentage of desired pods (ex: 10%). This can not be 0 if MaxSurge is 0.
+        maxUnavailable: 0%
+    # Optional
+    # The number of old ReplicaSets to retain.
+    # Default is 2
+    revisionHistoryLimit: 5

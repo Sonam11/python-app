@@ -1,0 +1,39 @@
+on:
+  workflow_call:
+    inputs:
+      target-env:
+        required: true
+        type: string
+    secrets:
+      GIT_TOKEN:
+        required: true
+
+jobs:
+  deploy:
+    name: Deploy to ${ { inputs.target-env } }
+    permissions:
+      deployments: write
+      contents: write
+      statuses: write
+      actions: write
+    runs-on: ubuntu-latest
+    environment:
+      name: ${ { inputs.target-env } }
+      # url: $
+
+    steps:
+    - run: echo "🎉 target evn ${ { inputs.target-env} }"
+    - run: echo "🎉 target evn inputs.target-env"
+    - run: echo "💡 get azure webapp name from secrets ${ { secrets.AZURE_WEBAPP_SERVICE_NAME } }"
+    - run: echo "🍏 is Dev  ${ { inputs.target-env } } == 'Dev'"
+    - run: echo "🐧 is Prod  ${ { inputs.target-env } } == 'Prod'"
+    - name: Promote build to ${ { inputs.target-env} }
+      run: |
+          cd k8s/helm/${ { inputs.target-env} }/va6
+          sed -i 's|tag:.*|tag: '${{ github.sha }}'|' values.yaml 
+          git config --global user.name 'Sonam11'
+          git config --global user.email 'Sonam11@github.com'
+          git config --global user.password ${{ secrets.GIT_TOKEN }}
+          git add values.yaml
+          git commit -m "Update values.yaml git sha"
+          git push
