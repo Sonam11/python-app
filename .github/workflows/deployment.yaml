@@ -32,13 +32,13 @@ jobs:
       target-env: Dev
     secrets: inherit
     needs: 
-      - manual-approval
+      - build-and-push
           
   manual-approval:
     environment: 'Approval needed for Prod'
     runs-on: ubuntu-20.04
     needs:
-      - build-and-test
+      - deploy-on-dev
     steps:
       - run: echo "Approved to Prod"
       
