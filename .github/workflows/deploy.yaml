@@ -26,6 +26,7 @@ jobs:
     - run: echo "🎉 target evn inputs.target-env"
     - run: echo "🍏 is Dev  ${{ inputs.target-env }} == 'Dev'"
     - run: echo "🐧 is Prod  ${{ inputs.target-env }} == 'Prod'"
+    - uses: actions/checkout@v3
     - name: Promote build to ${{ inputs.target-env}}
       run: |
           cd k8s/helm/${{ inputs.target-env}}/va6
