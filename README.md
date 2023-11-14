@@ -39,4 +39,5 @@ Ethos has defined reusable templates for K8s objects to create a CaaS.Next Servi
     - `values.yaml`: This file defines the service level attributes for your service which can be overrided at the environment and region level if requried. Ethos recommendation is to specify all the attributes (needed for the service) in service level values.yaml of the repository.
     - `<environment>/values.yaml`:  This file defines the common attributes for an environment.
     - `<environment>/<region>/values.yaml`: This file defines the common attributes for a region.
+    - 
 
