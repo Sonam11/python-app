@@ -131,7 +131,7 @@ ethos-k8s-helm-templates:
       healthCheck:
 
         # Mandatory
-        path: /ping
+        path: /health
 
         # Optional
         # Number of consecutive health check failures required before considering a service to be unhealthy
