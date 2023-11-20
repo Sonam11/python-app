@@ -159,7 +159,7 @@ ethos-k8s-helm-templates:
       #   Where cluster_name will be in the format: ethos101-dev-va6
       #   More details available on this doc https://git.corp.adobe.com/adobe-platform/k8s-infrastructure/blob/master/docs/user-guide.md#ingress-dns-names
       # You can also use a route53 domain hosted in your own account
-      fqdn: orca-caasdev4-Dev-va6-b8yve.dev.cloud.adobe.io
+      fqdn: caas2-dev-va6.dev.cloud.adobe.io/
       
       tlsSecretName: heptio-contour/cluster-ssl-alternate
 
