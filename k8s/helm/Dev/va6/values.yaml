@@ -14,6 +14,7 @@ global:
   # Cluster cloud type
   # Should be defined at the region level
   cloudType: AWS
+  serviceEnvironment: Dev
 
   # Mandatory
   # Ingress access
