@@ -77,10 +77,10 @@ ethos-k8s-helm-templates:
           # Mandatory
           # Path for liveness probe GET request
           # Ex: /ping
-          path: /ping
+          path: /health
 
           # Mandatory
-          port: 8080
+          port: 5000
 
           # Optional.
           # Number of 'seconds' after the container has started before liveness probes are initiated.
@@ -99,10 +99,10 @@ ethos-k8s-helm-templates:
           # Mandatory
           # Path for readiness probe GET request
           # Ex: /ping
-          path: /ping
+          path: /health
 
           # Mandatory
-          port: 8080
+          port: 5000
 
           # Optional.
           # Number of seconds after the container has started before readiness probes are initiated.
@@ -124,7 +124,7 @@ ethos-k8s-helm-templates:
     httpProxy:
       # Mandatory
       # The port used by the ingress to expose the service
-      port: 8080
+      port: 5000
 
       # Mandatory
       # Configurable health check
@@ -175,10 +175,10 @@ ethos-k8s-helm-templates:
      - 
        # Port being exposed. If using ingressroute, at least one port from the list must match the ingressroute port
        # Ex: 8080
-       port: 8080
+       port: 5000
        # Protocol used by the service object
        # Ex: TCP
        protocol: TCP
        # Container port that is exposed through the service
        # Ex: 80
-       targetPort: 8080
+       targetPort: 5000
