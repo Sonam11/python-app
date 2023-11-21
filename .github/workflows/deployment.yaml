@@ -26,19 +26,28 @@ jobs:
     secrets: inherit
   
   deploy-on-dev:
-    name: 'Deploy to Dev env'
+    name: 'Deploy to Dev va6'
     uses: ./.github/workflows/deploy.yaml
     with:
       target-env: Dev
     secrets: inherit
     needs: 
       - build-and-push
+      
+  parallel-job-to-dev-deployment:
+    environment: 'Deploy to Dev va7'
+    runs-on: ubuntu-20.04
+    needs:
+      - build-and-push
+    steps:
+      - run: echo "I am just a test"
           
   manual-approval:
     environment: 'Approval needed for Prod'
     runs-on: ubuntu-20.04
     needs:
       - deploy-on-dev
+      - parallel-job-to-dev-deployment
     steps:
       - run: echo "Approved to Prod"
       
