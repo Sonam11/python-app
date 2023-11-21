@@ -54,5 +54,5 @@ jobs:
   exit-handler:
     name: 'Exit Handler'
     uses: ./.github/workflows/exit.yaml
-    if: always()
+    if: failure()
     
