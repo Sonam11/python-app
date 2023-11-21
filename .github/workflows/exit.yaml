@@ -1,0 +1,10 @@
+name: Exit Handler
+
+on:
+  workflow_call
+
+jobs:
+  Handle-exit:
+    runs-on: ubuntu-latest
+    steps:
+    - run: echo "🎉 I am happy"
