@@ -51,4 +51,8 @@ jobs:
     needs: 
       - manual-approval
       
+  exit-handler:
+    name: 'Exit Handler'
+    uses: ./.github/workflows/exit.yaml
+    if: always()
     
