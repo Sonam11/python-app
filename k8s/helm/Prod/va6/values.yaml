@@ -68,7 +68,7 @@ ethos-k8s-helm-templates:
           # Mandatory
           # This is just a placeholder
           # No need to update this as it will be modified by argo promote env workflow
-          tag: d1a3ca5b974cfc9a225184612bc7356b625504a5
+          tag: 7839bbded0ff261596b2a46ce6329b9e7c361450
 
         # Mandatory
         # Liveness Probe configurations for a container
