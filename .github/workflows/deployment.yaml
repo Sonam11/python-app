@@ -9,9 +9,11 @@ name: Deployment Pipeline
 
 on:
   push:
+    paths-ignore:
+      - 'k8s/**'
     branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+  # pull_request:
+  #   branches: [ "main" ]
 
 permissions:
   deployments: write
